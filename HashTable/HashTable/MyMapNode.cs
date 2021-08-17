@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace HashTable
 {
+    public class KeyValue<K, V>
+    {
+        public K Key { get; set; }
+        public V Value { get; set; }
+
+        public int freq { get; set; }
+    }
     public class MyMapNode<K, V>
     {
-        public struct KeyValue<k, v>
-        {
-            public K Key { get; set; }
-            public V Value { get; set; }
-        }
         private readonly int size;
         private readonly LinkedList<KeyValue<K, V>>[] items;
-
         public MyMapNode(int size)
         {
             this.size = size;
@@ -32,6 +33,7 @@ namespace HashTable
             int position = key.GetHashCode() % size;
             return Math.Abs(position);
         }
+
         /// <summary>
         /// Gets the specified key from a linked list.
         /// </summary>
@@ -46,6 +48,7 @@ namespace HashTable
                 if (item.Key.Equals(key))
                     return item.Value;
             }
+
             return default(V);
         }
         /// <summary>
@@ -61,6 +64,7 @@ namespace HashTable
             { Key = key, Value = value };
             linkedList.AddLast(item);
             Console.WriteLine(item.Key + " " + item.Value);
+
         }
         /// <summary>
         /// Removes the specified key from the linked list.
@@ -120,7 +124,7 @@ namespace HashTable
         /// Gets the freqency of each word in the sentence.
         /// </summary>
         /// <param name="value">The value.</param>
-        public void GetFreq(V value)
+        public int GetFreq(V value)
         {
             int freq = 0;
             foreach (LinkedList<KeyValue<K, V>> list in items)
@@ -136,6 +140,25 @@ namespace HashTable
                 }
             }
             Console.WriteLine("Frequency of {0} is {1}", value, freq);
+            return freq;
+        }
+        /// <summary>
+        /// Displays the frequency words in large paragraphs.
+        /// </summary>
+        public void DisplayFrequency()
+        {
+            foreach (LinkedList<KeyValue<K, V>> list in items)
+            {
+                if (list == null)
+                    continue;
+                foreach (KeyValue<K, V> obj in list)
+                {
+                    if (obj.Equals(null))
+                        continue;
+                    else
+                        obj.freq = GetFreq(obj.Value);
+                }
+            }
         }
     }
 }
